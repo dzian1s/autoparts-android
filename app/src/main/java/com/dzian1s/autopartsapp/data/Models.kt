@@ -21,3 +21,17 @@ data class SearchResponse(
     val mode: String,
     val items: List<ProductDto>
 )
+
+@Serializable
+data class CreateOrderItemDto(val productId: String, val qty: Int)
+
+@Serializable
+data class CreateOrderRequest(
+    val customerName: String? = null,
+    val customerPhone: String? = null,
+    val customerComment: String? = null,
+    val items: List<CreateOrderItemDto>
+)
+
+@Serializable
+data class CreateOrderResponse(val orderId: String)

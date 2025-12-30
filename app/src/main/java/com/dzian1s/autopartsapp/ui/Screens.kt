@@ -9,7 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.dzian1s.autopartsapp.data.CreateOrderItemDto
+import com.dzian1s.autopartsapp.data.CreateOrderRequest
 import com.dzian1s.autopartsapp.data.ProductDto
+import com.dzian1s.autopartsapp.data.Repository
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProductRow(p: ProductDto, onClick: () -> Unit) {
@@ -165,6 +169,18 @@ fun DetailsScreen(
 fun CartScreen(cart: CartState, onBack: () -> Unit) {
     val items = cart.items // <-- важно: читает state каждый раз
 
+    var name by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf("") }
+    var comment by rememberSaveable { mutableStateOf("") }
+
+    var sending by remember { mutableStateOf(false) }
+    var sentOrderId by remember { mutableStateOf<String?>(null) }
+    var sendError by remember { mutableStateOf<String?>(null) }
+
+    val scope = rememberCoroutineScope()
+    val repo = remember { Repository() }
+
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("Cart") }) }
     ) { pad ->
@@ -197,6 +213,72 @@ fun CartScreen(cart: CartState, onBack: () -> Unit) {
 
             Spacer(Modifier.height(8.dp))
             Text("Total: ${cart.totalCents()} cents", style = MaterialTheme.typography.titleMedium)
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Name") }
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = phone,
+                onValueChange = { phone = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Phone") }
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Comment") }
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            if (sentOrderId != null) {
+                Text("Order sent: $sentOrderId", style = MaterialTheme.typography.titleMedium)
+            }
+
+            if (sendError != null) {
+                Text("Error: $sendError")
+            }
+
+            Button(
+                enabled = !sending && items.isNotEmpty(),
+                onClick = {
+                    sending = true
+                    sendError = null
+                    sentOrderId = null
+
+                    val req = CreateOrderRequest(
+                        customerName = name.ifBlank { null },
+                        customerPhone = phone.ifBlank { null },
+                        customerComment = comment.ifBlank { null },
+                        items = items.map { CreateOrderItemDto(it.product.id, it.qty) }
+                    )
+
+                    scope.launch {
+                        runCatching { repo.createOrder(req) }
+                            .onSuccess { resp ->
+                                sentOrderId = resp.orderId
+                                cart.clear()
+                            }
+                            .onFailure { e ->
+                                sendError = e.message
+                            }
+                        sending = false
+                    }
+                }
+            ) {
+                Text(if (sending) "Sending..." else "Send order")
+            }
+
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 TextButton(onClick = { cart.clear() }) { Text("Clear") }

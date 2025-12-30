@@ -9,6 +9,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface ApiService {
     @GET("api/products")
@@ -20,6 +22,8 @@ interface ApiService {
     @GET("api/search")
     suspend fun search(@Query("q") q: String): SearchResponse
 
+    @POST("api/orders")
+    suspend fun createOrder(@Body req: CreateOrderRequest): CreateOrderResponse
 }
 
 object Api {

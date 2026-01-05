@@ -1,16 +1,17 @@
 package com.dzian1s.autopartsapp.data
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
+import com.dzian1s.autopartsapp.BuildConfig
 
 interface ApiService {
     @GET("api/products")
@@ -27,8 +28,6 @@ interface ApiService {
 }
 
 object Api {
-    // твой IP из проверки с телефона:
-    private const val BASE_URL = "http://10.178.157.56:8080/"
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -42,7 +41,7 @@ object Api {
 
     val service: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()

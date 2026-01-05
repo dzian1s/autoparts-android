@@ -1,6 +1,6 @@
 package com.dzian1s.autopartsapp.ui
 
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dzian1s.autopartsapp.data.ProductDto
@@ -8,14 +8,13 @@ import com.dzian1s.autopartsapp.data.Repository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
 
 data class SearchState(
     val query: String = "",
     val loading: Boolean = false,
     val mode: String? = null,
     val items: List<ProductDto> = emptyList(),
-    val error: String? = null
+    val error: Throwable? = null
 )
 
 @OptIn(FlowPreview::class)
@@ -24,15 +23,18 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private val queryFlow = MutableStateFlow("")
+    private val retryTick = MutableStateFlow(0)
 
     var state by mutableStateOf(SearchState())
         private set
 
     init {
         viewModelScope.launch {
-            queryFlow
+            val debouncedQuery = queryFlow
                 .debounce(350)
                 .distinctUntilChanged()
+
+            combine(debouncedQuery, retryTick) { q, _ -> q }
                 .collectLatest { q ->
                     state = state.copy(query = q)
 
@@ -43,6 +45,7 @@ class SearchViewModel(
                     }
 
                     state = state.copy(loading = true, error = null)
+
                     runCatching { repo.search(trimmed) }
                         .onSuccess { res ->
                             state = state.copy(
@@ -53,7 +56,12 @@ class SearchViewModel(
                             )
                         }
                         .onFailure { e ->
-                            state = state.copy(loading = false, error = e.message, items = emptyList(), mode = null)
+                            state = state.copy(
+                                loading = false,
+                                mode = null,
+                                items = emptyList(),
+                                error = e
+                            )
                         }
                 }
         }
@@ -62,5 +70,9 @@ class SearchViewModel(
     fun onQueryChange(q: String) {
         state = state.copy(query = q)
         queryFlow.value = q
+    }
+
+    fun retry() {
+        retryTick.value = retryTick.value + 1
     }
 }

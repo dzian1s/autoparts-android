@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 data class CatalogState(
     val loading: Boolean = false,
     val items: List<ProductDto> = emptyList(),
-    val error: String? = null
+    val error: Throwable? = null
 )
 
 class CatalogViewModel(
@@ -26,8 +26,8 @@ class CatalogViewModel(
         state = state.copy(loading = true, error = null)
         viewModelScope.launch {
             runCatching { repo.products() }
-                .onSuccess { state = CatalogState(loading = false, items = it) }
-                .onFailure { state = CatalogState(loading = false, items = emptyList(), error = it.message) }
+                .onSuccess { state = CatalogState(loading = false, items = it, error = null) }
+                .onFailure { e -> state = CatalogState(loading = false, items = emptyList(), error = e) }
         }
     }
 }

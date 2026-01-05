@@ -1,3 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AutopartsApp</string>
+
+    <string name="app_name">Tiptronic Group</string>
+    <!-- Common -->
+    <string name="back">Wstecz</string>
+    <string name="retry">Spróbuj ponownie</string>
+    <string name="something_went_wrong">Coś poszło nie tak</string>
+    <string name="error_with_message">Błąd: %1$s</string>
+
+    <!-- Catalog -->
+    <string name="catalog_title">Katalog</string>
+    <string name="open_search">Wyszukaj</string>
+    <string name="loading_catalog">Ładowanie katalogu…</string>
+    <string name="no_products">Brak produktów</string>
+
+    <!-- Search -->
+    <string name="search_title">Wyszukiwanie</string>
+    <string name="search_label">Szukaj (nr części/OEM/nazwa, literówki OK)</string>
+    <string name="type_to_search">Wpisz zapytanie, aby wyszukać</string>
+    <string name="loading_search">Wyszukiwanie…</string>
+    <string name="no_results">Brak wyników</string>
+    <string name="mode_label">tryb: %1$s</string>
+
+    <!-- Product row / details -->
+    <string name="product_title">Produkt</string>
+    <string name="cart">Koszyk</string>
+    <string name="part_label">Część: %1$s</string>
+    <string name="oem_label">OEM: %1$s</string>
+    <string name="price_label">Cena: %1$s</string>
+    <string name="loading_product">Ładowanie produktu…</string>
+    <string name="add_to_cart">Dodaj do koszyka</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Koszyk</string>
+    <string name="cart_empty">Koszyk jest pusty</string>
+    <string name="continue_shopping">Kontynuuj zakupy</string>
+    <string name="order_sent">Zamówienie wysłane: %1$s</string>
+
+    <string name="qty_each">Ilość: %1$d • %2$s / szt.</string>
+    <string name="line_total">Pozycja: %1$s</string>
+    <string name="total">Suma</string>
+
+    <string name="name_required">Imię i nazwisko*</string>
+    <string name="phone_required">Telefon*</string>
+    <string name="comment">Komentarz</string>
+
+    <string name="agree_pd">Wyrażam zgodę na przetwarzanie danych osobowych</string>
+    <string name="policy">Polityka</string>
+
+    <string name="send_order">Wyślij zamówienie</string>
+    <string name="sending">Wysyłanie…</string>
+    <string name="clear">Wyczyść</string>
+
+    <!-- Privacy policy -->
+    <string name="privacy_policy_title">Polityka prywatności</string>
+    <string name="what_we_collect">Co zbieramy</string>
+    <string name="collect_items">- Imię i numer telefonu\n- Zawartość zamówienia\n- Status zamówienia i znaczniki czasu</string>
+    <string name="why_title">Po co</string>
+    <string name="why_text">Używamy tych danych do realizacji zamówienia i kontaktu w sprawie dostawy.</string>
+    <string name="storage_title">Przechowywanie</string>
+    <string name="storage_text">To projekt dyplomowy/demo. Dane mogą zostać usunięte przy resecie bazy.</string>
+    <string name="control_title">Kontrola</string>
+    <string name="control_text">Możesz poprosić o usunięcie danych (opcjonalna funkcja).</string>
+
+    <!-- Errors -->
+    <string name="err_no_internet">Brak połączenia z internetem</string>
+    <string name="err_timeout">Przekroczono limit czasu żądania</string>
+    <string name="err_server">Błąd serwera (%1$d)</string>
+    <string name="err_http_generic">Błąd HTTP</string>
+    <string name="err_name_required">Imię jest wymagane</string>
+    <string name="err_phone_required">Telefon jest wymagany</string>
+    <string name="err_consent_required">Zgoda z polityką jest wymagana</string>
+
+    <!-- Home -->
+    <string name="home_title">Start</string>
+    <string name="home_catalog">Katalog</string>
+    <string name="home_search">Wyszukaj części</string>
+    <string name="home_cart">Koszyk</string>
+    <string name="home_cart_with_count">Koszyk (%1$d)</string>
+    <string name="home_orders">Moje zamówienia</string>
+
+    <!-- Orders -->
+    <string name="orders_title">Moje zamówienia</string>
+
+
 </resources>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tiptronic Group</string>
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="retry">Retry</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="error_with_message">Error: %1$s</string>
+
+    <!-- Catalog -->
+    <string name="catalog_title">Catalog</string>
+    <string name="open_search">Search</string>
+    <string name="loading_catalog">Loading catalog…</string>
+    <string name="no_products">No products</string>
+
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_label">Search (part/OEM/name, typos ok)</string>
+    <string name="type_to_search">Type something to search</string>
+    <string name="loading_search">Searching…</string>
+    <string name="no_results">No results</string>
+    <string name="mode_label">mode: %1$s</string>
+
+    <!-- Product row / details -->
+    <string name="product_title">Product</string>
+    <string name="cart">Cart</string>
+    <string name="part_label">Part: %1$s</string>
+    <string name="oem_label">OEM: %1$s</string>
+    <string name="price_label">Price: %1$s</string>
+    <string name="loading_product">Loading product…</string>
+    <string name="add_to_cart">Add to cart</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Cart</string>
+    <string name="cart_empty">Cart is empty</string>
+    <string name="continue_shopping">Continue shopping</string>
+    <string name="order_sent">Order sent: %1$s</string>
+
+    <string name="qty_each">Qty: %1$d • %2$s each</string>
+    <string name="line_total">Line: %1$s</string>
+    <string name="total">Total</string>
+
+    <string name="name_required">Full name*</string>
+    <string name="phone_required">Phone*</string>
+    <string name="comment">Comment</string>
+
+    <string name="agree_pd">I agree to personal data processing</string>
+    <string name="policy">Policy</string>
+
+    <string name="send_order">Send order</string>
+    <string name="sending">Sending…</string>
+    <string name="clear">Clear</string>
+
+    <!-- Privacy policy -->
+    <string name="privacy_policy_title">Privacy policy</string>
+    <string name="what_we_collect">What we collect</string>
+    <string name="collect_items">- Name and phone number\n- Order contents\n- Order status and timestamps</string>
+    <string name="why_title">Why</string>
+    <string name="why_text">We use this data to process your order and contact you about fulfillment.</string>
+    <string name="storage_title">Storage</string>
+    <string name="storage_text">This is a diploma/demo project. Data may be removed by database reset.</string>
+    <string name="control_title">Control</string>
+    <string name="control_text">You can request data deletion (optional feature).</string>
+
+    <!-- Errors -->
+    <string name="err_no_internet">No internet connection</string>
+    <string name="err_timeout">Request timed out</string>
+    <string name="err_server">Server error (%1$d)</string>
+    <string name="err_http_generic">HTTP error</string>
+    <string name="err_name_required">Name is required</string>
+    <string name="err_phone_required">Phone is required</string>
+    <string name="err_consent_required">Consent is required</string>
+
+    <!-- Home -->
+    <string name="home_title">Home</string>
+    <string name="home_catalog">Catalog</string>
+    <string name="home_search">Search parts</string>
+    <string name="home_cart">Cart</string>
+    <string name="home_cart_with_count">Cart (%1$d)</string>
+    <string name="home_orders">My orders</string>
+
+    <!-- Orders -->
+    <string name="orders_title">My orders</string>
+
+
+</resources>

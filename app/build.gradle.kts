@@ -20,6 +20,28 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "env"
+
+    productFlavors {
+        create("emulator") {
+            dimension = "env"
+            // Android Emulator -> host
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+        }
+
+        create("device") {
+            dimension = "env"
+            // real mobile
+            buildConfigField("String", "BASE_URL", "\"http://192.168.0.13:8080/\"")
+        }
+
+        create("prod") {
+            dimension = "env"
+            // deploy
+            buildConfigField("String", "BASE_URL", "\"http://192.168.0.13:8080/\"")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -38,6 +60,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

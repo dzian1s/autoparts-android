@@ -22,7 +22,16 @@ class MainActivity : ComponentActivity() {
             val nav = rememberNavController()
             val cart = remember { CartState() }
 
-            NavHost(navController = nav, startDestination = "catalog") {
+            NavHost(navController = nav, startDestination = "home") {
+                composable("home") {
+                    HomeScreen(
+                        cart = cart,
+                        onOpenCatalog = { nav.navigate("catalog") },
+                        onOpenSearch = { nav.navigate("search") },
+                        onOpenCart = { nav.navigate("cart") },
+                        onOpenOrders = { nav.navigate("orders") }
+                    )
+                }
                 composable("catalog") {
                     val vm: CatalogViewModel = viewModel()
                     CatalogScreen(
@@ -55,7 +64,17 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable("cart") {
-                    CartScreen(cart = cart, onBack = { nav.popBackStack() })
+                    CartScreen(
+                        cart = cart,
+                        onBack = { nav.popBackStack() },
+                        onOpenPolicy = { nav.navigate("privacy") }
+                    )
+                }
+                composable("privacy") {
+                    PrivacyPolicyScreen(onBack = { nav.popBackStack() })
+                }
+                composable("orders") {
+                    OrdersScreen(onBack = { nav.popBackStack() })
                 }
             }
         }

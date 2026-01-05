@@ -8,7 +8,6 @@ data class CartItem(val product: ProductDto, val qty: Int)
 class CartState {
     private val map = mutableStateMapOf<String, CartItem>()
 
-    // читаемое состояние для UI
     val items: List<CartItem>
         get() = map.values.toList()
 

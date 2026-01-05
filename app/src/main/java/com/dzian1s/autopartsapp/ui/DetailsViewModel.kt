@@ -5,14 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import com.dzian1s.autopartsapp.data.ProductDto
 import com.dzian1s.autopartsapp.data.Repository
+import kotlinx.coroutines.launch
 
 data class DetailsState(
     val loading: Boolean = false,
     val item: ProductDto? = null,
-    val error: String? = null
+    val error: Throwable? = null
 )
 
 class DetailsViewModel(
@@ -26,8 +26,8 @@ class DetailsViewModel(
         state = state.copy(loading = true, error = null)
         viewModelScope.launch {
             runCatching { repo.product(id) }
-                .onSuccess { state = DetailsState(loading = false, item = it) }
-                .onFailure { state = DetailsState(loading = false, item = null, error = it.message) }
+                .onSuccess { state = DetailsState(loading = false, item = it, error = null) }
+                .onFailure { e -> state = DetailsState(loading = false, item = null, error = e) }
         }
     }
 }

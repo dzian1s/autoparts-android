@@ -7,21 +7,18 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import com.dzian1s.autopartsapp.ui.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import kotlinx.coroutines.launch
-import com.dzian1s.autopartsapp.data.Api
+import com.dzian1s.autopartsapp.ui.theme.AutopartsTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             val nav = rememberNavController()
             val cart = remember { CartState() }
-
+            AutopartsTheme {
             NavHost(navController = nav, startDestination = "home") {
                 composable("home") {
                     HomeScreen(
@@ -74,8 +71,21 @@ class MainActivity : ComponentActivity() {
                     PrivacyPolicyScreen(onBack = { nav.popBackStack() })
                 }
                 composable("orders") {
-                    OrdersScreen(onBack = { nav.popBackStack() })
+                    val vm: OrdersViewModel = viewModel()
+                    OrdersScreen(
+                        vm = vm,
+                        onBack = { nav.popBackStack() },
+                        onOpenDetails = { id -> nav.navigate("orderDetails/$id") }
+                    )
                 }
+                composable(
+                    route = "orderDetails/{id}",
+                    arguments = listOf(navArgument("id") { type = NavType.StringType })
+                ) { entry ->
+                    val id = entry.arguments?.getString("id")!!
+                    OrderDetailsScreen(orderId = id, onBack = { nav.popBackStack() })
+                }
+            }
             }
         }
     }

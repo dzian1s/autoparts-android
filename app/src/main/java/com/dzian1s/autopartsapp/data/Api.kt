@@ -25,6 +25,16 @@ interface ApiService {
 
     @POST("api/orders")
     suspend fun createOrder(@Body req: CreateOrderRequest): CreateOrderResponse
+
+    @GET("api/orders/by-client/{clientId}")
+    suspend fun getOrdersByClient(
+        @Path("clientId") clientId: String,
+        @Query("limit") limit: Int = 50,
+        @Query("offset") offset: Long = 0
+    ): List<OrderListItemDto>
+
+    @GET("api/orders/{id}")
+    suspend fun getOrderDetails(@Path("id") id: String): OrderDetailsDto
 }
 
 object Api {

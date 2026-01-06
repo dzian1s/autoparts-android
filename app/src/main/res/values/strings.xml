@@ -82,6 +82,15 @@
 
     <!-- Orders -->
     <string name="orders_title">Moje zamówienia</string>
+    <string name="orders_loading">Ładowanie zamówień…</string>
+    <string name="orders_empty">Brak zamówień</string>
+
+    <string name="order_details_title">Szczegóły zamówienia</string>
+    <string name="order_details_loading">Ładowanie zamówienia…</string>
+    <string name="order_status">Status</string>
+    <string name="order_items">Pozycje</string>
+    <string name="orders_coming">Nadchodzące zamowenia</string>
+    <string name="orders_summary">%1$d szt. • %2$s</string>
 
 
 </resources>

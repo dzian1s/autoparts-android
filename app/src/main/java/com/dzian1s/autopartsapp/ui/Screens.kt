@@ -1,5 +1,7 @@
 package com.dzian1s.autopartsapp.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.dzian1s.autopartsapp.R
 import androidx.compose.ui.unit.dp
@@ -83,6 +86,8 @@ private fun EmptyView(text: String) {
 @Composable
 fun ProductRow(p: ProductDto, onClick: () -> Unit) {
     Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
@@ -113,7 +118,15 @@ fun HomeScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.home_title)) }) }
+        topBar = { TopAppBar(
+            navigationIcon = {
+                Image(
+                    painter = painterResource(R.drawable.yellow),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+            },
+            title = {  Text(stringResource(R.string.home_title)) })}
     ) { pad ->
         Column(
             modifier = Modifier
@@ -154,30 +167,6 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrdersScreen(onBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.orders_title)) },
-                navigationIcon = {
-                    TextButton(onClick = onBack) { Text(stringResource(R.string.back)) }
-                }
-            )
-        }
-    ) { pad ->
-        Column(
-            Modifier
-                .padding(pad)
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Text(stringResource(R.string.orders_coming))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 fun CatalogScreen(vm: CatalogViewModel, onOpenSearch: () -> Unit, onOpenDetails: (String) -> Unit) {
     LaunchedEffect(Unit) { vm.load() }
 
@@ -186,6 +175,13 @@ fun CatalogScreen(vm: CatalogViewModel, onOpenSearch: () -> Unit, onOpenDetails:
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(R.drawable.yellow),
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp)
+                    )
+                },
                 title = { Text(stringResource(R.string.catalog_title)) },
                 actions = {
                     TextButton(onClick = onOpenSearch) { Text(stringResource(R.string.open_search)) }
@@ -215,7 +211,15 @@ fun SearchScreen(vm: SearchViewModel, onBack: () -> Unit, onOpenDetails: (String
     val s = vm.state
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.search_title)) }) }
+        topBar = { TopAppBar(
+            navigationIcon = {
+                Image(
+                    painter = painterResource(R.drawable.yellow),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+            },
+            title = { Text(stringResource(R.string.search_title)) }) }
     ) { pad ->
         Column(Modifier.padding(pad).fillMaxSize().padding(12.dp)) {
             OutlinedTextField(
@@ -265,6 +269,13 @@ fun DetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(R.drawable.yellow),
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp)
+                    )
+                },
                 title = { Text(stringResource(R.string.product_title)) },
                 actions = { TextButton(onClick = onOpenCart) { Text(stringResource(R.string.cart)) } }
             )
@@ -323,12 +334,19 @@ fun CartScreen(cart: CartState, onBack: () -> Unit, onOpenPolicy: () -> Unit) {
     var triedSend by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Cart") }) }
+        topBar = { TopAppBar(
+            navigationIcon = {
+                Image(
+                    painter = painterResource(R.drawable.yellow),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+            },
+            title = { Text("Cart") }) }
     ) { pad ->
         Column(Modifier.padding(pad).fillMaxSize().padding(12.dp)) {
 
-            // After successful order we clear the cart,
-            // so show confirmation even if items become empty.
+            // After successful order we clear the cart, show confirmation even if items become empty.
             if (items.isEmpty() && sentOrderId == null) {
                 EmptyView(stringResource(R.string.cart_empty))
                 Spacer(Modifier.height(8.dp))
@@ -526,6 +544,156 @@ fun PrivacyPolicyScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(12.dp))
             Text(stringResource(R.string.control_title), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.control_text))
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OrdersScreen(
+    vm: OrdersViewModel,
+    onBack: () -> Unit,
+    onOpenDetails: (String) -> Unit
+) {
+    val context = LocalContext.current
+    val clientId = remember { UserPrefs.getOrCreateClientId(context) }
+    val s = vm.state
+
+    LaunchedEffect(clientId) { vm.load(clientId) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.orders_title)) },
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(R.drawable.yellow),
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp)
+                    )
+                    },
+                actions = {TextButton(onClick = onBack) { Text(stringResource(R.string.back)) } }
+            )
+        }
+    ) { pad ->
+        Box(Modifier.padding(pad).fillMaxSize().padding(12.dp)) {
+            when {
+                s.loading -> LoadingView(stringResource(R.string.orders_loading))
+                s.error != null -> ErrorView(s.error) { vm.load(clientId) }
+                s.items.isEmpty() -> EmptyView(stringResource(R.string.orders_empty))
+                else -> LazyColumn {
+                    items(s.items, key = { it.id }) { o ->
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp)
+                                .clickable { onOpenDetails(o.id) }
+                        ) {
+                            Column(Modifier.padding(12.dp)) {
+                                Text(o.status, style = MaterialTheme.typography.titleMedium)
+                                Text(o.createdAt.replace("T", " ").take(19))
+
+                                Text(stringResource(R.string.orders_summary, o.itemsCount, formatEur(o.totalCents)))
+
+                                Spacer(Modifier.height(6.dp))
+                                if (!o.customerName.isNullOrBlank()) Text(o.customerName)
+                                if (!o.customerPhone.isNullOrBlank()) Text(o.customerPhone)
+                            }
+                        }
+                        Divider()
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OrderDetailsScreen(
+    orderId: String,
+    onBack: () -> Unit
+) {
+    val repo = remember { Repository() }
+    var loading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf<Throwable?>(null) }
+    var order by remember { mutableStateOf<com.dzian1s.autopartsapp.data.OrderDetailsDto?>(null) }
+
+    LaunchedEffect(orderId) {
+        loading = true
+        error = null
+        order = null
+        runCatching { repo.orderDetails(orderId) }
+            .onSuccess { order = it }
+            .onFailure { error = it }
+        loading = false
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.order_details_title)) },
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(R.drawable.yellow),
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp)
+                    )
+                    },
+                actions = {TextButton(onClick = onBack) { Text(stringResource(R.string.back)) } }
+            )
+        }
+    ) { pad ->
+        Box(Modifier.padding(pad).fillMaxSize().padding(12.dp)) {
+            when {
+                loading -> LoadingView(stringResource(R.string.order_details_loading))
+                error != null -> ErrorView(error) {
+                    loading = true
+                    error = null
+                    order = null
+                }
+                order != null -> {
+                    val o = order!!
+                    val total = o.items.sumOf { it.qty * it.priceCents }
+
+                    Column {
+                        Text("ID: ${o.id}")
+                        Text(o.createdAt.replace("T", " ").take(19))
+                        Text("${stringResource(R.string.order_status)}: ${o.status}")
+                        Spacer(Modifier.height(8.dp))
+
+                        if (!o.customerName.isNullOrBlank()) Text(o.customerName)
+                        if (!o.customerPhone.isNullOrBlank()) Text(o.customerPhone)
+                        if (!o.customerComment.isNullOrBlank()) Text(o.customerComment)
+
+                        Spacer(Modifier.height(12.dp))
+                        Text(stringResource(R.string.order_items), style = MaterialTheme.typography.titleMedium)
+
+                        Spacer(Modifier.height(6.dp))
+                        LazyColumn(Modifier.weight(1f, fill = false)) {
+                            items(o.items, key = { it.productId }) { itx ->
+                                val line = itx.qty * itx.priceCents
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Column(Modifier.weight(1f)) {
+                                        Text(itx.name)
+                                        Text("${itx.qty} × ${formatEur(itx.priceCents)}")
+                                    }
+                                    Text(formatEur(line))
+                                }
+                                Divider()
+                            }
+                        }
+
+                        Spacer(Modifier.height(8.dp))
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(stringResource(R.string.total), style = MaterialTheme.typography.titleMedium)
+                            Text(formatEur(total), style = MaterialTheme.typography.titleMedium)
+                        }
+                    }
+                }
+            }
         }
     }
 }

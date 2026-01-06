@@ -13,7 +13,7 @@ class CartState {
 
     fun add(p: ProductDto) {
         val existing = map[p.id]
-        map[p.id] = if (existing == null) CartItem(p, 1) else existing.copy(qty = existing.qty + 1)
+        map[p.id] = existing?.copy(qty = existing.qty + 1) ?: CartItem(p, 1)
     }
 
     fun removeOne(p: ProductDto) {

@@ -7,5 +7,10 @@ class Repository(
     suspend fun product(id: String): ProductDto = api.getProduct(id)
     suspend fun search(q: String): SearchResponse = api.search(q)
     suspend fun createOrder(req: CreateOrderRequest): CreateOrderResponse =
-        Api.service.createOrder(req)
+        api.createOrder(req)
+    suspend fun ordersByClient(clientId: String): List<OrderListItemDto> =
+        api.getOrdersByClient(clientId)
+    suspend fun orderDetails(id: String): OrderDetailsDto =
+        api.getOrderDetails(id)
+
 }
